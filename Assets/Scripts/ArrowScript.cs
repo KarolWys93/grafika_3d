@@ -6,45 +6,60 @@ using UnityEngine;
 public class ArrowScript : MonoBehaviour {
  
     
+    private enum ArrowState
+    {
+        inSpawn,
+        isSticked,
+        isInFlight
+    }
+
+
+    private ArrowState _arrowState = ArrowState.inSpawn;
     
-    private bool __isFlight = false;
     public float power = 10;
 
     private Rigidbody rBody;
-    private Transform anchor;
+    private Transform stickingPoint;
     
     // Use this for initialization
-    private void Start () {
+    private void Start ()
+    {
         rBody = GetComponent<Rigidbody>();
-        rBody.AddRelativeForce(power * Vector3.forward, ForceMode.Impulse);
-//        rBody.velocity = power*Vector3.forward;
-        __isFlight = true;
+        _arrowState = ArrowState.inSpawn;
     }
     	
     // Update is called once per frame
     void Update () {
-        
-        if (__isFlight)
+        if (_arrowState == ArrowState.isInFlight)
         {
             SpinInAir();
         }
-        else if (this.anchor != null)
+        
+        if (_arrowState == ArrowState.isSticked && stickingPoint != null)
         {
-            transform.position = anchor.transform.position;
-            transform.rotation = anchor.transform.rotation;
+            transform.position = stickingPoint.transform.position;
+            transform.rotation = stickingPoint.transform.rotation;
         }
     }
-
-    private void FixedUpdate()
+ 
+    
+    private void OnCollisionEnter(Collision other)
     {
+        if (_arrowState == ArrowState.isInFlight)
+        {
+            StickToObstacle(other);
+        }
 
     }
 
+    public void startArrow(float force)
+    {
+        _arrowState = ArrowState.isInFlight;
+        rBody.AddRelativeForce((power*force) * Vector3.forward, ForceMode.Impulse);
+    }
 
     private void SpinInAir()
-    {
-        if (!__isFlight) return;
-        
+    {   
         var yVelocity = rBody.velocity.y;
         var xVelocity = rBody.velocity.x;
         var zVelocity = rBody.velocity.z;
@@ -55,48 +70,17 @@ public class ArrowScript : MonoBehaviour {
         
         transform.eulerAngles = new Vector3(fallAngle, transform.eulerAngles.y, transform.eulerAngles.z);
     }
-
     
-    
-    private void OnTriggerEnter(Collider other)
+    private void StickToObstacle(Collision coll)
     {
-//        StickToObstacle(other);
-    }
-    
-    private void OnCollisionEnter(Collision other)
-    {
-        if (__isFlight)
-        {
-            StickToObstacle2(other);
-        }
-        
-    }
-
-    private void StickToObstacle2(Collision coll)
-    {
-        __isFlight = false;
-//        this.transform.position = coll.contacts[0].point;
-//        this.childCollider.isTrigger = true;
-        
         GameObject anchor = new GameObject("ARROW_ANCHOR");
         anchor.transform.position = this.transform.position;
         anchor.transform.rotation = this.transform.rotation;
         anchor.transform.parent = coll.transform;
-        this.anchor = anchor.transform;
-//        rBody.constraints = RigidbodyConstraints.FreezeAll;
+        this.stickingPoint = anchor.transform;
         Destroy(rBody);
         Destroy(GetComponent<Collider>());
-//        Destroy(GetComponent<Collider>());
+        _arrowState = ArrowState.isSticked;
     }
-    
-//    private void StickToObstacle(Collider coll)
-//    {
-//        if (!__isFlight) return;
-//        __isFlight = false;
-//        rBody.constraints = RigidbodyConstraints.FreezeAll;
-////            this.rBody.velocity = Vector3.zero;
-////            this.rBody.useGravity = false;
-////            this.rBody.isKinematic = true;
-//
-//    }
+
 }

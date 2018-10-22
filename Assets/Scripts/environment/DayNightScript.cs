@@ -43,13 +43,8 @@ public class DayNightScript : MonoBehaviour {
 
         float yArg = (CurrentTimeOfDay * 360f) - 90;
         float zArg = 0;
+        float xArg = Mathf.Sin((yArg / 180) * Mathf.PI) * MaxSunAngle;    //-1 * 90/360f * yArg; //Mathf.Sin(CurrentTimeOfDay * Mathf.PI);
 
-        float xArg = 90;
-        if (MaxSunAngle < 90)
-        {
-            xArg = ((-1*Mathf.Pow(yArg, 2) + 180 * yArg)/8100f)*MaxSunAngle;
-        }
-        
         Sun.transform.rotation = Quaternion.Euler(xArg, yArg, zArg);
         float intensityMultiplier = 1;
         if (CurrentTimeOfDay <= 0.23f || CurrentTimeOfDay >= 0.75f) {
