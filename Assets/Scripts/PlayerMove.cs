@@ -21,12 +21,12 @@ public class PlayerMove : MonoBehaviour
 
     void Update ()
     {
-        float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
+        float rotationX = transform.localEulerAngles.y + Input.GetAxis("Horizontal") * sensitivityX;
 
-        rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+        rotationY += Input.GetAxis("Vertical") * sensitivityY;
         rotationY = Mathf.Clamp (rotationY, minimumY, maximumY);
 
-        transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
+        transform.localEulerAngles = new Vector3(rotationY, rotationX, 0);
         
     }
 }

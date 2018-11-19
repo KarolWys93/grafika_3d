@@ -1840,8 +1840,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5769db1d0476ceb41afbd37adddff575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivityX: 5
-  sensitivityY: 5
+  sensitivityX: 0.5
+  sensitivityY: 0.5
   minimumX: -360
   maximumX: 360
   minimumY: -50

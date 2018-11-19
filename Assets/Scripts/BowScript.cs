@@ -46,25 +46,27 @@
      {
          ArrowScript _arrowScript = arrow.transform.GetComponent<ArrowScript>();
          
-         if (Input.GetMouseButton(0))
+         if (Input.GetButton("Fire1"))
          {
-             arrowPower += Time.deltaTime * pullSpeed;
-             if (arrowPower >= 100)
-             {
-                 arrowPower = 100;
-             }
-         }
+            arrowPower = Input.GetAxis("Fire1");
+             //arrowPower += Time.deltaTime * pullSpeed;
+             //if (arrowPower >= 100)
+             //{
+             //    arrowPower = 100;
+             //}
+        }
          
-         if (Input.GetMouseButtonUp(0))
+         if (Input.GetButtonUp("Fire1"))
          {
-             arrowSlotted = false;
+            arrowPower = Input.GetAxisRaw("Fire1");
+            arrowSlotted = false;
              arrow.GetComponent<Rigidbody>().isKinematic = false;
              arrow.transform.parent = null;
              _arrowScript.startArrow(arrowPower+0.05f);// = _arrowScript.shootPower * ((pullAmount / 100) + 0.05f);
              arrowPower = 0;
          }
          
-         if (Input.GetMouseButtonDown(0) && arrowSlotted == false)
+         if (Input.GetButtonDown("Fire1") && arrowSlotted == false)
          {
              SpawnArrow();
          }
