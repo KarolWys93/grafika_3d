@@ -9,6 +9,9 @@
      public GameObject ArrowPrefab;
      public Transform arrowSpawn;
 
+     public Animator animator;
+     
+
 
      private GameObject arrow;
 
@@ -42,7 +45,8 @@
          
          if (Input.GetMouseButton(0))
          {
-             
+             animator.SetBool("isPulled", true);
+             animator.SetFloat("pullPower", arrowPower/100);
              
              if (arrowPower < 100)
              {
@@ -54,6 +58,7 @@
          
          if (Input.GetMouseButtonUp(0))
          {
+             animator.SetBool("isPulled", false);
              arrowSlotted = false;
              arrow.GetComponent<Rigidbody>().isKinematic = false;
              arrow.transform.parent = null;
