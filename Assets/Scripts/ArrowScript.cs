@@ -20,16 +20,22 @@ public class ArrowScript : MonoBehaviour {
 
     private Rigidbody rBody;
     private Transform stickingPoint;
+
+    public float stick_time = 20;
+    private float remove_time = 0;
+
+    private GameObject anchor;
     
     // Use this for initialization
     private void Start ()
     {
         rBody = GetComponent<Rigidbody>();
+        rBody.interpolation = RigidbodyInterpolation.None;
         _arrowState = ArrowState.inSpawn;
     }
-    	
-    // Update is called once per frame
-    void Update () {
+
+    private void FixedUpdate()
+    {
         if (_arrowState == ArrowState.isInFlight)
         {
             SpinInAir();
@@ -40,9 +46,15 @@ public class ArrowScript : MonoBehaviour {
             transform.position = stickingPoint.transform.position;
             transform.rotation = stickingPoint.transform.rotation;
         }
+
+        if (_arrowState == ArrowState.isSticked && remove_time < Time.time)
+        {
+            Destroy(this.anchor);
+            Destroy(this.gameObject);
+        }
     }
- 
-    
+
+
     private void OnCollisionEnter(Collision other)
     {
         if (_arrowState == ArrowState.isInFlight)
@@ -54,6 +66,7 @@ public class ArrowScript : MonoBehaviour {
 
     public void startArrow(float force)
     {
+        rBody.interpolation = RigidbodyInterpolation.Interpolate;
         _arrowState = ArrowState.isInFlight;
         rBody.AddRelativeForce((power*(force/100)) * Vector3.forward, ForceMode.Impulse);
     }
@@ -73,14 +86,23 @@ public class ArrowScript : MonoBehaviour {
     
     private void StickToObstacle(Collision coll)
     {
-        GameObject anchor = new GameObject("ARROW_ANCHOR");
-        anchor.transform.position = this.transform.position;
+        if (coll.transform.CompareTag("Player"))
+        {
+            return;
+        }
+        var contactPoint = coll.GetContact(0);
+        anchor = new GameObject("ARROW_ANCHOR");
         anchor.transform.rotation = this.transform.rotation;
-        anchor.transform.parent = coll.transform;
+        anchor.transform.position = this.transform.position;
+
+//        anchor.transform.position += anchor.transform.forward * .2f;
+        
+        anchor.transform.parent = coll.gameObject.transform;
         this.stickingPoint = anchor.transform;
         Destroy(rBody);
         Destroy(GetComponent<Collider>());
         _arrowState = ArrowState.isSticked;
+        remove_time = Time.time + stick_time;
     }
 
 }

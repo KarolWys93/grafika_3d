@@ -10,9 +10,11 @@
      public Transform arrowSpawn;
 
      public Animator animator;
+     public float reload_time = 1;
      
-
-
+     
+     
+     private float next_shoot = 0;
      private GameObject arrow;
 
      private bool arrowSlotted = false;
@@ -27,7 +29,10 @@
      // Update is called once per frame
      void Update ()
      {
-         shootLogic();
+         if (next_shoot < Time.time )
+         {
+             shootLogic();
+         }
      }
      
      
@@ -41,18 +46,23 @@
 
      void shootLogic()
      {
-         ArrowScript _arrowScript = arrow.transform.GetComponent<ArrowScript>();
+        
          
-         if (Input.GetMouseButton(0))
+         
+         if (Input.GetMouseButtonDown(0) && arrowSlotted == false)
          {
-             animator.SetBool("isPulled", true);
-             animator.SetFloat("pullPower", arrowPower/100);
-             
+             SpawnArrow();
+         }
+         
+         if (Input.GetMouseButton(0) && arrowSlotted == true)
+         {
              if (arrowPower < 100)
              {
-                 float lastPower = arrowPower;
-                 arrowPower += Time.deltaTime * pullSpeed;
-                 arrow.transform.position -= arrow.transform.forward*(lastPower - arrowPower)/100;
+                 var delta = Time.deltaTime * pullSpeed;
+                 arrowPower += delta;
+                 arrow.transform.position += arrow.transform.forward*(delta)/100;
+                 animator.SetBool("isPulled", true);
+                 animator.SetFloat("pullPower", (arrowPower/100)+0.05f);
              }
          }
          
@@ -62,16 +72,11 @@
              arrowSlotted = false;
              arrow.GetComponent<Rigidbody>().isKinematic = false;
              arrow.transform.parent = null;
-             _arrowScript.startArrow(arrowPower+0.05f);// = _arrowScript.shootPower * ((pullAmount / 100) + 0.05f);
+             arrow.transform.GetComponent<ArrowScript>().startArrow(arrowPower+0.05f);
              arrowPower = 0;
+             next_shoot = Time.time + reload_time;
+             arrow = null;
          }
-         
-         if (Input.GetMouseButtonDown(0) && arrowSlotted == false)
-         {
-             SpawnArrow();
-         }
-         
-         
      }
      
  }
