@@ -25,12 +25,6 @@
      void Update ()
      {
          shootLogic();
-         
-         
-//         if (!arrowSlotted)
-//         {
-//             SpawnArrow();
-//         }
      }
      
      
@@ -48,14 +42,11 @@
          
          if (Input.GetButton("Fire1"))
          {
-            arrowPower = Input.GetAxis("Fire1");
-             //arrowPower += Time.deltaTime * pullSpeed;
-             //if (arrowPower >= 100)
-             //{
-             //    arrowPower = 100;
-             //}
+             arrowPower = Input.GetAxis("Fire1");
+			 float lastPower = arrowPower;
+             arrowPower = Input.GetAxis("Fire1");
+             arrow.transform.position -= arrow.transform.forward*(lastPower - arrowPower)/100;
         }
-         
          if (Input.GetButtonUp("Fire1"))
          {
             arrowPower = Input.GetAxisRaw("Fire1");
@@ -73,42 +64,5 @@
          
          
      }
-     
-     
-//     void shotLogic(){
-//
-////        SkinnedMeshRenderer _bowSkin = bow.transform.GetComponent<SkinnedMeshRenderer>();
-////        SkinnedMeshRenderer _arrowSkin = arrow.transform.GetComponent<SkinnedMeshRenderer>();
-//         Rigidbody _arrowRigidB = arrow.transform.GetComponent<Rigidbody>();
-//
-//         ShootArrowScript _arrowScript = arrow.transform.GetComponent<ShootArrowScript>();//GetComponent<ShootArrowScript>();
-//
-//         if (Input.GetMouseButton(0))
-//         {
-//             pullAmount += Time.deltaTime * pullSpeed;
-//         }
-//
-//         if (Input.GetMouseButtonUp(0))
-//         {
-//             arrowSlotted = false;
-//             _arrowRigidB.isKinematic = false;
-//             arrow.transform.parent = null;
-//             _arrowScript.shootPower = _arrowScript.shootPower * ((pullAmount / 100) + 0.05f);
-//             pullAmount = 0;
-//         }
-//        
-////        _bowSkin.SetBlendShapeWeight(0, pullAmount);
-////        _arrowSkin.SetBlendShapeWeight(0, pullAmount);
-//
-//         _arrowScript.enabled = true;
-//
-//         if (Input.GetMouseButtonDown(0) && arrowSlotted == false)
-//         {
-//             SpawnArrow();
-//         }
-//
-//
-//     }
-     
      
  }

@@ -55,7 +55,7 @@ public class ArrowScript : MonoBehaviour {
     public void startArrow(float force)
     {
         _arrowState = ArrowState.isInFlight;
-        rBody.AddRelativeForce((power*force) * Vector3.forward, ForceMode.Impulse);
+        rBody.AddRelativeForce((power*(force/100)) * Vector3.forward, ForceMode.Impulse);
     }
 
     private void SpinInAir()
