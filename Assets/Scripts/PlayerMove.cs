@@ -19,7 +19,7 @@ public class PlayerMove : MonoBehaviour
         Cursor.visible = false;
     }
 
-    void Update ()
+    void FixedUpdate ()
     {
         float rotationX = transform.localEulerAngles.y + Input.GetAxis("Horizontal") * sensitivityX;
 
@@ -27,6 +27,10 @@ public class PlayerMove : MonoBehaviour
         rotationY = Mathf.Clamp (rotationY, minimumY, maximumY);
 
         transform.localEulerAngles = new Vector3(rotationY, rotationX, 0);
-        
+
+        Vector3 movement = new Vector3(-Input.GetAxis("Move X") * 0.1f, 0.0f, Input.GetAxis("Move Z") * 0.1f).normalized;
+        movement = transform.TransformDirection(movement);
+
+        GetComponent<Rigidbody>().MovePosition(transform.position + movement);
     }
 }
