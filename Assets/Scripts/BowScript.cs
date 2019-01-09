@@ -20,9 +20,16 @@
      private bool arrowSlotted = false;
      
      private float arrowPower = 0;
+     
+     [SerializeField] private AudioClip m_PullSound;        // the sound played when arrow is pulled.
+     [SerializeField] private AudioClip m_ReleaseSound;    // the sound played when arrow is released.
+     private AudioSource m_AudioSource;
+     
  	
      // Use this for initialization
-     void Start () {
+     void Start ()
+     {
+        m_AudioSource = GetComponent<AudioSource>();
  		SpawnArrow();
      }
  	
@@ -44,6 +51,7 @@
          arrow.GetComponent<Rigidbody>().isKinematic = true;
      }
 
+     private bool isPulled = false;
      void shootLogic()
      {
         
@@ -56,6 +64,12 @@
          
          if (Input.GetMouseButton(0) && arrowSlotted == true)
          {
+             if (!isPulled)
+             {
+                 isPulled = true;
+                 m_AudioSource.clip = m_PullSound;
+                 m_AudioSource.Play();
+             }
              if (arrowPower < 100)
              {
                  var delta = Time.deltaTime * pullSpeed;
@@ -68,6 +82,10 @@
          
          if (Input.GetMouseButtonUp(0))
          {
+             isPulled = false;
+             m_AudioSource.Stop();
+             m_AudioSource.clip = m_ReleaseSound;
+             m_AudioSource.Play();
              animator.SetBool("isPulled", false);
              arrowSlotted = false;
              arrow.GetComponent<Rigidbody>().isKinematic = false;
