@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
- 
+using Random = UnityEngine.Random;
+
 public class ArrowScript : MonoBehaviour {
  
     
@@ -26,12 +27,16 @@ public class ArrowScript : MonoBehaviour {
 
     private GameObject anchor;
     
+    [SerializeField] private AudioClip[] m_ImapctSound;        // the sound played when arrow impact.
+    private AudioSource m_AudioSource;
+    
     // Use this for initialization
     private void Start ()
     {
         rBody = GetComponent<Rigidbody>();
         rBody.interpolation = RigidbodyInterpolation.None;
         _arrowState = ArrowState.inSpawn;
+        m_AudioSource = GetComponent<AudioSource>();
     }
 
     private void FixedUpdate()
@@ -90,6 +95,7 @@ public class ArrowScript : MonoBehaviour {
         {
             return;
         }
+        m_AudioSource.PlayOneShot(m_ImapctSound[Random.Range(0, m_ImapctSound.Length)]);
         var contactPoint = coll.GetContact(0);
         anchor = new GameObject("ARROW_ANCHOR");
         anchor.transform.rotation = this.transform.rotation;
