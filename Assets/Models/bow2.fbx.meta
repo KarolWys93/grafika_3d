@@ -1,16 +1,88 @@
 fileFormatVersion: 2
-guid: 303ee4cca96987649b8de4c0137350d1
+guid: edf744951b087ac468971e19c74c47e0
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2100000: unnamed
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Bowstring_Loops
-    7400000: Default Take
+    100000: Armature
+    100002: Bone
+    100004: Bone.001
+    100006: Bone.002
+    100008: Bone.003
+    100010: Bone.004
+    100012: Bone.005
+    100014: Bone.006
+    100016: Bone.007
+    100018: Bone.007_end
+    100020: Bone.008
+    100022: Bone.009
+    100024: Bone.010
+    100026: Bone.011
+    100028: Bone.012
+    100030: Bone.013
+    100032: Bone.014
+    100034: Bone.015
+    100036: Bone.015_end
+    100038: bottom_ik
+    100040: bottom_ik_end
+    100042: bottom_limit
+    100044: bottom_limit_end
+    100046: bow
+    100048: //RootNode
+    100050: main
+    100052: string
+    100054: string_end
+    100056: top_ik
+    100058: top_ik.001
+    100060: top_ik.002
+    100062: top_ik_end
+    100064: top_limit
+    100066: top_limit_end
+    100068: Sun
+    400000: Armature
+    400002: Bone
+    400004: Bone.001
+    400006: Bone.002
+    400008: Bone.003
+    400010: Bone.004
+    400012: Bone.005
+    400014: Bone.006
+    400016: Bone.007
+    400018: Bone.007_end
+    400020: Bone.008
+    400022: Bone.009
+    400024: Bone.010
+    400026: Bone.011
+    400028: Bone.012
+    400030: Bone.013
+    400032: Bone.014
+    400034: Bone.015
+    400036: Bone.015_end
+    400038: bottom_ik
+    400040: bottom_ik_end
+    400042: bottom_limit
+    400044: bottom_limit_end
+    400046: bow
+    400048: //RootNode
+    400050: main
+    400052: string
+    400054: string_end
+    400056: top_ik
+    400058: top_ik.001
+    400060: top_ik.002
+    400062: top_ik_end
+    400064: top_limit
+    400066: top_limit_end
+    400068: Sun
+    2100000: No Name
+    2100002: String
+    2100004: bow
+    4300000: bow
+    7400000: Armature|pull_string
+    7400002: Armature|release_string
     9500000: //RootNode
+    10800000: Sun
+    13700000: bow
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -45,6 +117,7 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -62,13 +135,16 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 1
+    previousCalculatedGlobalScale: 0.01
     hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
