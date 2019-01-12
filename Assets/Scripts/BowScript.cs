@@ -57,12 +57,12 @@
         
          
          
-         if (Input.GetMouseButtonDown(0) && arrowSlotted == false)
+         if (Input.GetButtonDown("Fire1") && arrowSlotted == false)
          {
              SpawnArrow();
          }
          
-         if (Input.GetMouseButton(0) && arrowSlotted == true)
+         if (Input.GetButton("Fire1") && arrowSlotted == true)
          {
              if (!isPulled)
              {
@@ -80,7 +80,7 @@
              }
          }
          
-         if (Input.GetMouseButtonUp(0))
+         if (Input.GetButtonUp("Fire1"))
          {
              isPulled = false;
              m_AudioSource.Stop();
