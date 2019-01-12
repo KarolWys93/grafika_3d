@@ -9,22 +9,37 @@
      public GameObject ArrowPrefab;
      public Transform arrowSpawn;
 
-
+     public Animator animator;
+     public float reload_time = 1;
+     
+     
+     
+     private float next_shoot = 0;
      private GameObject arrow;
 
      private bool arrowSlotted = false;
      
      private float arrowPower = 0;
+     
+     [SerializeField] private AudioClip m_PullSound;        // the sound played when arrow is pulled.
+     [SerializeField] private AudioClip m_ReleaseSound;    // the sound played when arrow is released.
+     private AudioSource m_AudioSource;
+     
  	
      // Use this for initialization
-     void Start () {
+     void Start ()
+     {
+        m_AudioSource = GetComponent<AudioSource>();
  		SpawnArrow();
      }
  	
      // Update is called once per frame
      void Update ()
      {
-         shootLogic();
+         if (next_shoot < Time.time )
+         {
+             shootLogic();
+         }
      }
      
      
@@ -36,33 +51,50 @@
          arrow.GetComponent<Rigidbody>().isKinematic = true;
      }
 
+     private bool isPulled = false;
      void shootLogic()
      {
-         ArrowScript _arrowScript = arrow.transform.GetComponent<ArrowScript>();
+        
          
-         if (Input.GetButton("Fire1"))
-         {
-             arrowPower = Input.GetAxis("Fire1");
-			 float lastPower = arrowPower;
-             arrowPower = Input.GetAxis("Fire1");
-             arrow.transform.position -= arrow.transform.forward*(lastPower - arrowPower)/100;
-        }
-         if (Input.GetButtonUp("Fire1"))
-         {
-            arrowPower = Input.GetAxisRaw("Fire1");
-            arrowSlotted = false;
-             arrow.GetComponent<Rigidbody>().isKinematic = false;
-             arrow.transform.parent = null;
-             _arrowScript.startArrow(arrowPower+0.05f);// = _arrowScript.shootPower * ((pullAmount / 100) + 0.05f);
-             arrowPower = 0;
-         }
          
-         if (Input.GetButtonDown("Fire1") && arrowSlotted == false)
+         if (Input.GetMouseButtonDown(0) && arrowSlotted == false)
          {
              SpawnArrow();
          }
          
+         if (Input.GetMouseButton(0) && arrowSlotted == true)
+         {
+             if (!isPulled)
+             {
+                 isPulled = true;
+                 m_AudioSource.clip = m_PullSound;
+                 m_AudioSource.Play();
+             }
+             if (arrowPower < 100)
+             {
+                 var delta = Time.deltaTime * pullSpeed;
+                 arrowPower += delta;
+                 arrow.transform.position += arrow.transform.forward*(delta)/100;
+                 animator.SetBool("isPulled", true);
+                 animator.SetFloat("pullPower", (arrowPower/100)+0.05f);
+             }
+         }
          
+         if (Input.GetMouseButtonUp(0))
+         {
+             isPulled = false;
+             m_AudioSource.Stop();
+             m_AudioSource.clip = m_ReleaseSound;
+             m_AudioSource.Play();
+             animator.SetBool("isPulled", false);
+             arrowSlotted = false;
+             arrow.GetComponent<Rigidbody>().isKinematic = false;
+             arrow.transform.parent = null;
+             arrow.transform.GetComponent<ArrowScript>().startArrow(arrowPower+0.05f);
+             arrowPower = 0;
+             next_shoot = Time.time + reload_time;
+             arrow = null;
+         }
      }
      
  }
